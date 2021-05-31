@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:solar_app/Dashboard/dashboard.dart';
+import 'package:solar_app/FirstPages/login.dart';
 
-class getStarted extends StatelessWidget {
+class GetStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -60,7 +62,9 @@ class SliderTile extends StatelessWidget {
           ),
           SizedBox(height: 60),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              moveToLoginPage(context);
+            },
             child: Text(
               'Get Started',
               style: TextStyle(
@@ -73,10 +77,29 @@ class SliderTile extends StatelessWidget {
                 primary: primaryColor,
                 minimumSize: Size(MediaQuery.of(context).size.width - 40, 50),
                 shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0))),
+                    borderRadius: new BorderRadius.circular(30.0)),),
           ),
         ],
       ),
     );
+  }
+  void moveToLoginPage(BuildContext context) {
+    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => Register()));
+    Navigator.of(context)
+        .push(new MyCustomRoute(builder: (context) => Login()));
+  }
+}
+
+class MyCustomRoute<T> extends MaterialPageRoute<T> {
+  MyCustomRoute({WidgetBuilder builder, RouteSettings settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    //if (settings.isInitialRoute) return child;
+    // Fades between routes. (If you don't want any animation,
+    // just return child.)
+    return new FadeTransition(opacity: animation, child: child);
   }
 }

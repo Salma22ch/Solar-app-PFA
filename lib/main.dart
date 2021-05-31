@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       ),
       //home: Authentificate(),
       //home: dashboard(),
-      home: getStarted(),
+      home: GetStarted(),
     );
   }
 }

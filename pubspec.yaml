@@ -54,6 +54,8 @@ flutter:
   assets:
     - assets/getStartedShape.png
     - getStartedAmpoule.png
+    - ampoule.png
+    - shape.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
