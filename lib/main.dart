@@ -1,10 +1,6 @@
-import 'package:solar_app/Authentification/helper/authentificate.dart';
-import 'package:solar_app/Authentification/views/signin.dart';
-import 'package:solar_app/Authentification/views/signup.dart';
 import 'package:flutter/material.dart';
-import 'package:solar_app/FirstPages/getStarted.dart';
+import 'package:solar_app/screens/authentification/authentification.dart';
 
-import 'Dashboard/dashboard.dart';
 
 void main() {
   runApp(MyApp());

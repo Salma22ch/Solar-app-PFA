@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import '../screens.dart';
+import 'authentification.dart';
 
-import 'login.dart';
-
-class Register extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     //throw UnimplementedError();
-    return _Register();
+    return _Login();
   }
 }
 
-class _Register extends State<Register> {
+class _Login extends State<Login> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -44,8 +44,18 @@ class _Register extends State<Register> {
               ),
               child: TextFormField(
                 cursorColor: primaryColor,
-                decoration: inputDecoration(
-                    primaryColor, accentColor, 'Enter your Email'),
+                decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor),
+                    ),
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor),
+                    ),
+                    labelText: 'Enter your Email',
+                    labelStyle: TextStyle(color: accentColor)),
               ),
             ),
             Padding(
@@ -54,25 +64,27 @@ class _Register extends State<Register> {
                 right: 30,
               ),
               child: TextFormField(
-                  cursorColor: primaryColor,
-                  decoration: inputDecoration(
-                      primaryColor, accentColor, 'Enter your Password')),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 30.0,
-                right: 30,
+                cursorColor: primaryColor,
+                decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: primaryColor),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: primaryColor),
+                  ),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: primaryColor),
+                  ),
+                  labelText: 'Enter your Password',
+                  labelStyle: TextStyle(color: accentColor),
+                ),
               ),
-              child: TextFormField(
-                  cursorColor: primaryColor,
-                  decoration: inputDecoration(
-                      primaryColor, accentColor, 'Confirm your Password')),
             ),
             Spacer(flex: 2),
             ElevatedButton(
-              onPressed: () => {},
+              onPressed: () => {moveToRegisterPage(context,BottomNavScreen())},
               child: Text(
-                "Register",
+                "Login",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
@@ -89,9 +101,9 @@ class _Register extends State<Register> {
             ),
             SizedBox(height: 10),
             OutlinedButton(
-              onPressed: () => {moveToLoginPage(context)},
+              onPressed: () => {moveToRegisterPage(context,Register())},
               child: Text(
-                "Already have an Account",
+                "Register",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
@@ -107,48 +119,24 @@ class _Register extends State<Register> {
               ),
             ),
             Spacer(
-              flex: 2,
+              flex: 1,
             ),
+            TextButton(
+              onPressed: () => {},
+              child: Text("Forget Password"),
+            ),
+            Spacer(
+              flex: 1,
+            )
           ],
         ),
       ),
     ));
   }
 
-  InputDecoration inputDecoration(
-      Color primaryColor, Color accentColor, String text) {
-    return InputDecoration(
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: primaryColor),
-      ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: primaryColor),
-      ),
-      border: UnderlineInputBorder(
-        borderSide: BorderSide(color: primaryColor),
-      ),
-      labelText: text,
-      labelStyle: TextStyle(color: accentColor),
-    );
-  }
-
-  void moveToLoginPage(BuildContext context) {
-    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => Register()));
+  void moveToRegisterPage(BuildContext context,Widget page) {
     Navigator.of(context)
-        .push(new MyCustomRoute(builder: (context) => Login()));
+        .push(new MyCustomRoute(builder: (context) => page));
   }
 }
 
-class MyCustomRoute<T> extends MaterialPageRoute<T> {
-  MyCustomRoute({WidgetBuilder builder, RouteSettings settings})
-      : super(builder: builder, settings: settings);
-
-  @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
-    //if (settings.isInitialRoute) return child;
-    // Fades between routes. (If you don't want any animation,
-    // just return child.)
-    return new FadeTransition(opacity: animation, child: child);
-  }
-}
