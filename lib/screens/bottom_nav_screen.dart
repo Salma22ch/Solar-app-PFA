@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solar_app/config/palette.dart';
+import 'package:solar_app/screens/inputs_screen.dart';
+import 'package:solar_app/screens/predections_screen.dart';
 import 'package:solar_app/widget/widgets.dart';
 import 'screens.dart';
 
@@ -13,11 +15,8 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   final List _screens = [
     DashboardScreen(),
-   // PredictionScreen(),
-   // InputsScreen(),
-    Scaffold(),
-    Scaffold(),
-    //Scaffold(),
+   PredectionScreen(),
+   InputScreen(),
   ];
   int _currentIndex = 0;
 
