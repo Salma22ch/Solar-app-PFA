@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:solar_app/screens/bottom_nav_screen.dart';
 import 'authentification.dart';
+import 'dart:convert';
+import "package:flutter/material.dart";
+
+import '../../NetworkHandler.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -11,6 +16,16 @@ class Register extends StatefulWidget {
 }
 
 class _Register extends State<Register> {
+  NetworkHandler networkHandler = NetworkHandler();
+  final _globalkey = GlobalKey<FormState>();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _passwordconfirmController = TextEditingController();
+  String errorText;
+  bool validate = false;
+  bool circular = false;
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -41,10 +56,23 @@ class _Register extends State<Register> {
                 left: 30.0,
                 right: 30.0,
               ),
-              child: TextFormField(
-                cursorColor: primaryColor,
-                decoration: inputDecoration(
-                    primaryColor, accentColor, 'Enter your Email'),
+              child: Form(
+                key: _globalkey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _emailController,
+                      validator: (value) {
+                        if (value.isEmpty) return "Email can't be empty";
+                        if (!value.contains("@")) return "Email is Invalid";
+                        return null;
+                      },
+                      cursorColor: primaryColor,
+                      decoration: inputDecoration(
+                          primaryColor, accentColor, 'Enter your Email'),
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -53,6 +81,12 @@ class _Register extends State<Register> {
                 right: 30,
               ),
               child: TextFormField(
+                  controller: _passwordController,
+                  validator: (value) {
+                    if (value.isEmpty) return "Password can't be empty";
+                    if (value.length < 8) return "Password lenght must have >=8";
+                    return null;
+                  },
                   cursorColor: primaryColor,
                   decoration: inputDecoration(
                       primaryColor, accentColor, 'Enter your Password')),
@@ -63,13 +97,25 @@ class _Register extends State<Register> {
                 right: 30,
               ),
               child: TextFormField(
+                  controller: _passwordconfirmController,
                   cursorColor: primaryColor,
                   decoration: inputDecoration(
                       primaryColor, accentColor, 'Confirm your Password')),
             ),
             Spacer(flex: 2),
             ElevatedButton(
-              onPressed: () => {},
+              onPressed: () async  {
+               /*var response = await networkHandler.get('');
+               if (response.statusCode == 200 ){
+                 Navigator.of(context)
+                     .push(new MyCustomRoute(builder: (context) => BottomNavScreen()));
+               }*/
+              Map<String, String> data = {
+              "email": _emailController.text,
+              "password": _passwordController.text,
+              };
+             var responseRegister =await networkHandler.post("/api/register", data);
+              },
               child: Text(
                 "Register",
                 style: TextStyle(
