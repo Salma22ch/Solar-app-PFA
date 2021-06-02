@@ -15,8 +15,8 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   final List _screens = [
     DashboardScreen(),
-   PredectionScreen(),
-   InputScreen(),
+    PredectionScreen(),
+    InputScreen(),
   ];
   int _currentIndex = 0;
 
@@ -31,24 +31,28 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: [Icons.dashboard, Icons.analytics, Icons.featured_play_list].
-        asMap().
-        map((key, value) =>
-            MapEntry(key, BottomNavigationBarItem(
-              label: "",
-              icon: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 30, vertical: 8,
-                ),
-                decoration:BoxDecoration(
-                  color: _currentIndex == key
-                      ? Palette.primaryColor
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Icon(value),),
-            ))
-        ).values.toList(),
+        items: [Icons.dashboard, Icons.analytics, Icons.featured_play_list]
+            .asMap()
+            .map((key, value) => MapEntry(
+                key,
+                BottomNavigationBarItem(
+                  label: "",
+                  icon: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _currentIndex == key
+                          ? Palette.primaryColor
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Icon(value),
+                  ),
+                )))
+            .values
+            .toList(),
         currentIndex: _currentIndex,
         selectedItemColor: Palette.backgroundColor,
         unselectedItemColor: Colors.grey,
