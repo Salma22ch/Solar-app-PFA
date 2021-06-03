@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:solar_app/screens/bottom_nav_screen.dart';
 import 'authentification.dart';
 import 'dart:convert';
-import "package:flutter/material.dart";
 
 import '../../NetworkHandler.dart';
 
@@ -183,5 +182,3 @@ class _Register extends State<Register> {
         .push(new MyCustomRoute(builder: (context) => Login()));
   }
 }
-
-

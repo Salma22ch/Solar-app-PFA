@@ -54,7 +54,7 @@ class _Login extends State<Login> {
                     border: UnderlineInputBorder(
                       borderSide: BorderSide(color: primaryColor),
                     ),
-                    labelText: 'Enter your Email',
+                    labelText: 'Email',
                     labelStyle: TextStyle(color: accentColor)),
               ),
             ),
@@ -75,7 +75,7 @@ class _Login extends State<Login> {
                   border: UnderlineInputBorder(
                     borderSide: BorderSide(color: primaryColor),
                   ),
-                  labelText: 'Enter your Password',
+                  labelText: 'Password',
                   labelStyle: TextStyle(color: accentColor),
                 ),
               ),
