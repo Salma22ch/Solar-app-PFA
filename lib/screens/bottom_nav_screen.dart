@@ -33,7 +33,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       drawer: CustomNavDrawer(),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: [Icons.dashboard, Icons.analytics, Icons.featured_play_list]
+        items: [Icons.analytics,Icons.batch_prediction, Icons.adjust]
             .asMap()
             .map((key, value) => MapEntry(
                 key,
