@@ -21,7 +21,7 @@ class CustomNavDrawer extends StatelessWidget {
                     children: [
                       ListTile(
                         leading:
-                            Icon(Icons.analytics, color: Palette.backgroundColor),
+                            Icon(Icons.analytics, color: Palette.accentColor),
                         title: Text(
                           'Dashboard',
                           style: _styleOfListTile(),
@@ -30,7 +30,7 @@ class CustomNavDrawer extends StatelessWidget {
                       ),
                       ListTile(
                         leading: Icon(Icons.batch_prediction,
-                            color: Palette.backgroundColor),
+                            color: Palette.accentColor),
                         title: Text(
                           'Predictions',
                           style: _styleOfListTile(),
@@ -39,7 +39,7 @@ class CustomNavDrawer extends StatelessWidget {
                       ),
                       ListTile(
                         leading: Icon(Icons.adjust,
-                            color: Palette.backgroundColor),
+                            color: Palette.accentColor),
                         title: Text(
                           'Inputs',
                           style: _styleOfListTile(),
@@ -49,7 +49,7 @@ class CustomNavDrawer extends StatelessWidget {
                       ListTile(
                         leading: Icon(
                           Icons.exit_to_app,
-                          color: Palette.backgroundColor,
+                          color: Palette.accentColor,
                         ),
                         title: Text(
                           'Logout',
@@ -64,7 +64,7 @@ class CustomNavDrawer extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 40.0, left: 40),
                     child: ListTile(
                       leading:
-                          Icon(Icons.settings, color: Palette.backgroundColor),
+                          Icon(Icons.settings, color: Palette.accentColor),
                       title: Text(
                         'Settings',
                         style: _styleOfListTile(fontWeight: FontWeight.w200),
@@ -104,7 +104,7 @@ class CustomNavDrawer extends StatelessWidget {
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w600,
-                  color: Palette.backgroundColor),
+                  color: Palette.accentColor),
             ),
           )
         ],
