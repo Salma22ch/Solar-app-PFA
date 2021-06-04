@@ -14,9 +14,7 @@ class _InputScreenState extends State<InputScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
       backgroundColor: Palette.primaryColor,
-      drawer: CustomNavDrawer(),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[
@@ -25,8 +23,6 @@ class _InputScreenState extends State<InputScreen> {
             padding: const EdgeInsets.only(top: 20),
             sliver: SliverToBoxAdapter(
             child: InputsList(),
-              //child: CovidBarChart(covidCases:[]),
-
             ),) 
           
         ],

@@ -10,12 +10,14 @@ class ConsumptionBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 450,
+      height: 400,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
+          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(15),
         ),
       ),
       child: Column(

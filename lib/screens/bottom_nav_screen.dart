@@ -29,6 +29,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(),
+      drawer: CustomNavDrawer(),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: [Icons.dashboard, Icons.analytics, Icons.featured_play_list]
