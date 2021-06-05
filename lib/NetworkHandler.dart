@@ -18,7 +18,11 @@ class NetworkHandler {
     var response = await http.post(
       url,
       body: json.encode(body),
+      headers: {
+        "Content-type": "application/json"
+      },
     );
+    log.i(json.encode(body));
     log.i(response.body);
     log.i(response.statusCode);
     return response;

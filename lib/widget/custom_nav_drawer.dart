@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:solar_app/config/palette.dart';
+import 'package:solar_app/screens/authentification/custom_route.dart';
+import 'package:solar_app/screens/authentification/login.dart';
 
 class CustomNavDrawer extends StatelessWidget {
   @override
@@ -51,9 +53,15 @@ class CustomNavDrawer extends StatelessWidget {
                           Icons.exit_to_app,
                           color: Palette.accentColor,
                         ),
-                        title: Text(
-                          'Logout',
-                          style: _styleOfListTile(),
+                        title: GestureDetector(
+                          child: Text(
+                            'Logout',
+                            style: _styleOfListTile(),
+                          ),
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(new MyCustomRoute(builder: (context) => Login()));
+                          },
                         ),
                         onTap: () => {Navigator.of(context).pop()},
                       ),

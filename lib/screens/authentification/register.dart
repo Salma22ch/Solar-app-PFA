@@ -15,12 +15,13 @@ class Register extends StatefulWidget {
 }
 
 class _Register extends State<Register> {
+  bool vis = true;
   NetworkHandler networkHandler = NetworkHandler();
   final _globalkey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _passwordconfirmController = TextEditingController();
-  String errorText;
+  String erroremail, errorpwd ;
   bool validate = false;
   bool circular = false;
 
@@ -83,12 +84,15 @@ class _Register extends State<Register> {
                   controller: _passwordController,
                   validator: (value) {
                     if (value.isEmpty) return "Password can't be empty";
-                    if (value.length < 8) return "Password lenght must have >=8";
+                    if (value.length < 6) return "Password lenght must have >=6";
                     return null;
                   },
+                  obscureText: vis,
                   cursorColor: primaryColor,
-                  decoration: inputDecoration(
-                      primaryColor, accentColor, 'Enter your Password')),
+
+                  decoration: inputDecorationpwd(
+                      primaryColor, accentColor, 'Enter your Password',
+                     )),
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -98,22 +102,34 @@ class _Register extends State<Register> {
               child: TextFormField(
                   controller: _passwordconfirmController,
                   cursorColor: primaryColor,
-                  decoration: inputDecoration(
+                  decoration: inputDecorationpwd(
                       primaryColor, accentColor, 'Confirm your Password')),
             ),
             Spacer(flex: 2),
-            ElevatedButton(
+            circular
+                ? CircularProgressIndicator()
+                :ElevatedButton(
               onPressed: () async  {
-               /*var response = await networkHandler.get('');
-               if (response.statusCode == 200 ){
-                 Navigator.of(context)
-                     .push(new MyCustomRoute(builder: (context) => BottomNavScreen()));
-               }*/
-              Map<String, String> data = {
-              "email": _emailController.text,
-              "password": _passwordController.text,
-              };
-             var responseRegister =await networkHandler.post("/api/register", data);
+                setState(() {
+                  circular = true;
+                });
+                checkEmail();
+                checkpassword() ;
+                if (_globalkey.currentState.validate() && validate) {
+                  Map<String, String> data = {
+                    "email": _emailController.text,
+                    "password": _passwordController.text,
+                  };
+                  var responseRegister = await networkHandler.post(
+                      "/api/register", data);
+                  if (responseRegister.statusCode == 200) {
+                    //var responseLogin =await networkHandler.post("/api/login", data);
+                    Navigator.of(context)
+                        .push(
+                        new MyCustomRoute(
+                            builder: (context) => BottomNavScreen()));
+                  }
+                }
               },
               child: Text(
                 "Register",
@@ -172,8 +188,66 @@ class _Register extends State<Register> {
         borderSide: BorderSide(color: primaryColor),
       ),
       labelText: text,
+     // errorText: validate ? null : erroremail,
       labelStyle: TextStyle(color: accentColor),
+
     );
+  }
+  InputDecoration inputDecorationpwd(
+      Color primaryColor, Color accentColor, String text) {
+    return InputDecoration(
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: primaryColor),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: primaryColor),
+      ),
+      border: UnderlineInputBorder(
+        borderSide: BorderSide(color: primaryColor),
+      ),
+      labelText: text,
+      errorText: validate ? null : errorpwd,
+      labelStyle: TextStyle(color: accentColor),
+      suffixIcon: IconButton(
+        icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
+        onPressed: () {
+          setState(() {
+            vis = !vis;
+          });
+        },
+      ),
+    );
+  }
+  checkEmail()  {
+    if (_emailController.text.length == 0) {
+      setState(() {
+         circular = false;
+        validate = false;
+        erroremail= "Email Can't be empty";
+      });
+
+      } else {
+        setState(() {
+          // circular = false;
+          validate = true;
+        });
+      }
+    }
+  checkpassword()  {
+
+    if (_passwordController.text.length == 0 || _passwordController.text.length < 6 || _passwordController.text !=_passwordconfirmController.text) {
+      setState(() {
+        circular = false;
+        validate = false;
+        errorpwd= "Invalid password";
+      });
+
+    } else {
+      setState(() {
+        // circular = false;
+        validate = true;
+      });
+    }
   }
 
   void moveToLoginPage(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../NetworkHandler.dart';
 import '../screens.dart';
 import 'authentification.dart';
 
@@ -12,6 +13,14 @@ class Login extends StatefulWidget {
 }
 
 class _Login extends State<Login> {
+  bool vis = true;
+  final _globalkey = GlobalKey<FormState>();
+  NetworkHandler networkHandler = NetworkHandler();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  String errorText;
+  bool validate = false;
+  bool circular = false;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -42,20 +51,33 @@ class _Login extends State<Login> {
                 left: 30.0,
                 right: 30.0,
               ),
-              child: TextFormField(
-                cursorColor: primaryColor,
-                decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor),
+              child: Form(
+                key: _globalkey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _emailController,
+                      validator: (value) {
+                        if (value.isEmpty) return "Email can't be empty";
+                        if (!value.contains("@")) return "Email is Invalid";
+                        return null;
+                      },
+                      cursorColor: primaryColor,
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor),
+                          ),
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor),
+                          ),
+                          labelText: 'Email',
+                          labelStyle: TextStyle(color: accentColor)),
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor),
-                    ),
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor),
-                    ),
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: accentColor)),
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -64,6 +86,11 @@ class _Login extends State<Login> {
                 right: 30,
               ),
               child: TextFormField(
+                controller: _passwordController,
+                validator: (value) {
+                  if (value.isEmpty) return "Password can't be empty";
+                  return null;
+                },
                 cursorColor: primaryColor,
                 decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -76,13 +103,40 @@ class _Login extends State<Login> {
                     borderSide: BorderSide(color: primaryColor),
                   ),
                   labelText: 'Password',
+                  errorText: validate ? null : errorText,
                   labelStyle: TextStyle(color: accentColor),
+                  suffixIcon: IconButton(
+                    icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        vis = !vis;
+                      });
+                    },
+                  ),
                 ),
               ),
             ),
             Spacer(flex: 2),
+            circular
+                ? CircularProgressIndicator():
             ElevatedButton(
-              onPressed: () => {moveToRegisterPage(context,BottomNavScreen())},
+              onPressed: () async{
+                checkInputs();
+                if (_globalkey.currentState.validate() && validate) {
+                Map<String, String> data = {
+                  "email": _emailController.text,
+                  "password": _passwordController.text,
+                };
+                var responseLogin =await networkHandler.post("/api/login", data);
+                print(responseLogin.statusCode);
+                if (responseLogin.statusCode == 200 ) {
+                  Navigator.of(context)
+                      .push(
+                      new MyCustomRoute(
+                          builder: (context) => BottomNavScreen()));
+
+                }
+                }},
               child: Text(
                 "Login",
                 style: TextStyle(
@@ -133,7 +187,21 @@ class _Login extends State<Login> {
       ),
     ));
   }
+  checkInputs()  {
+    if (_emailController.text.length == 0 || _passwordController.text.length ==0) {
+      setState(() {
+        circular = false;
+        validate = false;
+        errorText= "Invalid inputs";
+      });
 
+    } else {
+      setState(() {
+        // circular = false;
+        validate = true;
+      });
+    }
+  }
   void moveToRegisterPage(BuildContext context,Widget page) {
     Navigator.of(context)
         .push(new MyCustomRoute(builder: (context) => page));
