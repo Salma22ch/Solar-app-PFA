@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:solar_app/BloC/bloc/screenindex_bloc.dart';
 import 'package:solar_app/config/palette.dart';
 import 'package:solar_app/screens/authentification/custom_route.dart';
 import 'package:solar_app/screens/authentification/login.dart';
@@ -9,7 +11,9 @@ class CustomNavDrawer extends StatelessWidget {
     return SafeArea(
       child: ClipRRect(
         borderRadius: BorderRadius.only(
-            topRight: Radius.circular(30.0), bottomRight: Radius.circular(30)),
+          topRight: Radius.circular(30.0),
+          bottomRight: Radius.circular(30),
+        ),
         child: Drawer(
           child: Container(
               color: Palette.primaryColor,
@@ -18,7 +22,9 @@ class CustomNavDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _drawerHeader(),
-                  SizedBox(height: 40,),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Column(
                     children: [
                       ListTile(
@@ -28,7 +34,11 @@ class CustomNavDrawer extends StatelessWidget {
                           'Dashboard',
                           style: _styleOfListTile(),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () {
+                          BlocProvider.of<ScreenindexBloc>(context)
+                              .add(GetIndex(0));
+                          Navigator.of(context).pop();
+                        },
                       ),
                       ListTile(
                         leading: Icon(Icons.batch_prediction,
@@ -37,16 +47,23 @@ class CustomNavDrawer extends StatelessWidget {
                           'Predictions',
                           style: _styleOfListTile(),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () {
+                          BlocProvider.of<ScreenindexBloc>(context)
+                              .add(GetIndex(1));
+                          Navigator.of(context).pop();
+                        },
                       ),
                       ListTile(
-                        leading: Icon(Icons.adjust,
-                            color: Palette.accentColor),
+                        leading: Icon(Icons.adjust, color: Palette.accentColor),
                         title: Text(
                           'Inputs',
                           style: _styleOfListTile(),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () {
+                          BlocProvider.of<ScreenindexBloc>(context)
+                              .add(GetIndex(2));
+                          Navigator.of(context).pop();
+                        },
                       ),
                       ListTile(
                         leading: Icon(
@@ -59,8 +76,8 @@ class CustomNavDrawer extends StatelessWidget {
                             style: _styleOfListTile(),
                           ),
                           onTap: () {
-                            Navigator.of(context)
-                                .push(new MyCustomRoute(builder: (context) => Login()));
+                            Navigator.of(context).push(new MyCustomRoute(
+                                builder: (context) => Login()));
                           },
                         ),
                         onTap: () => {Navigator.of(context).pop()},
@@ -71,8 +88,7 @@ class CustomNavDrawer extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 40.0, left: 40),
                     child: ListTile(
-                      leading:
-                          Icon(Icons.settings, color: Palette.accentColor),
+                      leading: Icon(Icons.settings, color: Palette.accentColor),
                       title: Text(
                         'Settings',
                         style: _styleOfListTile(fontWeight: FontWeight.w200),
@@ -87,11 +103,9 @@ class CustomNavDrawer extends StatelessWidget {
     );
   }
 
-  TextStyle _styleOfListTile({FontWeight fontWeight=FontWeight.w300}) {
+  TextStyle _styleOfListTile({FontWeight fontWeight = FontWeight.w300}) {
     return TextStyle(
-        fontSize: 20,
-        fontWeight: fontWeight,
-        color: Palette.backgroundColor);
+        fontSize: 20, fontWeight: fontWeight, color: Palette.backgroundColor);
   }
 
   DrawerHeader _drawerHeader() {
