@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../../NetworkHandler.dart';
 import '../screens.dart';
 import 'authentification.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -21,6 +24,8 @@ class _Login extends State<Login> {
   String errorText;
   bool validate = false;
   bool circular = false;
+  // Create storage
+  final storage = new FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -91,6 +96,7 @@ class _Login extends State<Login> {
                   if (value.isEmpty) return "Password can't be empty";
                   return null;
                 },
+                obscureText: vis,
                 cursorColor: primaryColor,
                 decoration: InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -130,11 +136,15 @@ class _Login extends State<Login> {
                 var responseLogin =await networkHandler.post("/api/login", data);
                 print(responseLogin.statusCode);
                 if (responseLogin.statusCode == 200 ) {
-                  Navigator.of(context)
-                      .push(
-                      new MyCustomRoute(
-                          builder: (context) => BottomNavScreen()));
-
+                  Map<String, dynamic> output = json.decode(responseLogin.body);
+                  print(output["token"]);
+                  await storage.write(key: "token", value: output["token"]);
+                  setState(() {
+                    validate = true;
+                   // circular = false;
+                  });
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomNavScreen(),),
+                          (route) => false);
                 }
                 }},
               child: Text(
@@ -197,7 +207,7 @@ class _Login extends State<Login> {
 
     } else {
       setState(() {
-        // circular = false;
+        circular = true;
         validate = true;
       });
     }

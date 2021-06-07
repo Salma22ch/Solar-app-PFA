@@ -1,13 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:solar_app/screens/authentification/authentification.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:solar_app/screens/screens.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class  _MyAppState extends State<MyApp>{
   // This widget is the root of your application.
+  Widget page = GetStarted();
+  final storage = FlutterSecureStorage();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkLogin();
+  }
+  void checkLogin() async {
+
+    String token = await storage.read(key: "token");
+    if (token != null) {
+      setState(() {
+        page = BottomNavScreen();
+      });
+    } else {
+      setState(() {
+        page = GetStarted();
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,7 +62,10 @@ class MyApp extends StatelessWidget {
       ),
       //home: Authentificate(),
       //home: dashboard(),
-      home: GetStarted(),
+      home: page,
     );
   }
+
+
 }
+

@@ -4,8 +4,10 @@ import 'package:solar_app/BloC/bloc/screenindex_bloc.dart';
 import 'package:solar_app/config/palette.dart';
 import 'package:solar_app/screens/authentification/custom_route.dart';
 import 'package:solar_app/screens/authentification/login.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CustomNavDrawer extends StatelessWidget {
+  final storage = FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -75,9 +77,10 @@ class CustomNavDrawer extends StatelessWidget {
                             'Logout',
                             style: _styleOfListTile(),
                           ),
-                          onTap: () {
-                            Navigator.of(context).push(new MyCustomRoute(
-                                builder: (context) => Login()));
+                          onTap: () async{
+                            await storage.delete(key: "token");
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login(),),
+                                    (route) => false);
                           },
                         ),
                         onTap: () => {Navigator.of(context).pop()},

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:solar_app/screens/bottom_nav_screen.dart';
 import 'authentification.dart';
 import 'dart:convert';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../NetworkHandler.dart';
 
 class Register extends StatefulWidget {
@@ -25,7 +25,8 @@ class _Register extends State<Register> {
   bool validate = false;
   bool circular = false;
 
-
+  // Create storage
+  final storage = new FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -123,11 +124,16 @@ class _Register extends State<Register> {
                   var responseRegister = await networkHandler.post(
                       "/api/register", data);
                   if (responseRegister.statusCode == 200) {
-                    //var responseLogin =await networkHandler.post("/api/login", data);
-                    Navigator.of(context)
-                        .push(
-                        new MyCustomRoute(
-                            builder: (context) => BottomNavScreen()));
+                    var responseLogin =await networkHandler.post("/api/login", data);
+                    Map<String, dynamic> output = json.decode(responseLogin.body);
+                    print(output["token"]);
+                    await storage.write(key: "token", value: output["token"]);
+                    setState(() {
+                      validate = true;
+                      circular = false;
+                    });
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomNavScreen(),),
+                            (route) => false);
                   }
                 }
               },
