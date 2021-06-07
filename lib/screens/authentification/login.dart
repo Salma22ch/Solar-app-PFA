@@ -5,6 +5,7 @@ import '../../NetworkHandler.dart';
 import '../screens.dart';
 import 'authentification.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -137,7 +138,8 @@ class _Login extends State<Login> {
                 print(responseLogin.statusCode);
                 if (responseLogin.statusCode == 200 ) {
                   Map<String, dynamic> output = json.decode(responseLogin.body);
-                  print(output["token"]);
+                  Map<String, dynamic> payload = Jwt.parseJwt(output["token"]);
+                  print(payload["email"]);
                   await storage.write(key: "token", value: output["token"]);
                   setState(() {
                     validate = true;
