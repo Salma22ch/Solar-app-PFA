@@ -69,19 +69,12 @@ class CustomNavDrawer extends StatelessWidget {
                       ),
                       ListTile(
                         leading: Icon(
-                          Icons.exit_to_app,
+                          Icons.settings,
                           color: Palette.accentColor,
                         ),
-                        title: GestureDetector(
-                          child: Text(
-                            'Logout',
-                            style: _styleOfListTile(),
-                          ),
-                          onTap: () async{
-                            await storage.delete(key: "token");
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login(),),
-                                    (route) => false);
-                          },
+                        title: Text(
+                          'Settings',
+                          style: _styleOfListTile(),
                         ),
                         onTap: () => {Navigator.of(context).pop()},
                       ),
@@ -91,10 +84,22 @@ class CustomNavDrawer extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 40.0, left: 40),
                     child: ListTile(
-                      leading: Icon(Icons.settings, color: Palette.accentColor),
-                      title: Text(
-                        'Settings',
-                        style: _styleOfListTile(fontWeight: FontWeight.w200),
+                      leading:
+                          Icon(Icons.exit_to_app, color: Palette.accentColor),
+                      title: GestureDetector(
+                        child: Text(
+                          'Logout',
+                          style: _styleOfListTile(fontWeight: FontWeight.w200),
+                        ),
+                        onTap: () async {
+                          await storage.delete(key: "token");
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Login(),
+                              ),
+                              (route) => false);
+                        },
                       ),
                       onTap: () => {Navigator.of(context).pop()},
                     ),

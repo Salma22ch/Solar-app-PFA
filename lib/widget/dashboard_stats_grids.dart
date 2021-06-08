@@ -9,7 +9,8 @@ class _StatsGridState extends State<StatsGrid> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.10,
+      //height: MediaQuery.of(context).size.height * 0.10,
+      height: 100,
       child: Column(
         children: [
           Flexible(

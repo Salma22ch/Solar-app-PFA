@@ -31,57 +31,69 @@ class SliderTile extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              Image.asset(image),
-              Image.asset("getStartedAmpoule.png"),
-            ],
-          ),
-          SizedBox(height: 60),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.w300,
-              color: primaryColor,
+          Flexible(
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Image.asset(image),
+                Image.asset("getStartedAmpoule.png"),
+              ],
             ),
           ),
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.only(left: 15,right: 15),
-            child: Text(
-              desc,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: accentColor,
+          Flexible(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w300,
+                    color: primaryColor,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: Text(
+                    desc,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: accentColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Flexible(
+            child: ElevatedButton(
+              onPressed: () {
+                moveToLoginPage(context);
+              },
+              child: Text(
+                'Get Started',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: accentColor,
+                ),
               ),
-            ),
-          ),
-          SizedBox(height: 60),
-          ElevatedButton(
-            onPressed: () {
-              moveToLoginPage(context);
-            },
-            child: Text(
-              'Get Started',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: accentColor,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 primary: primaryColor,
                 minimumSize: Size(MediaQuery.of(context).size.width - 40, 50),
                 shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0)),),
+                    borderRadius: new BorderRadius.circular(30.0)),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
+
   void moveToLoginPage(BuildContext context) {
     //Navigator.of(context).push(MaterialPageRoute(builder: (context) => Register()));
     Navigator.of(context)
