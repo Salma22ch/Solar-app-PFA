@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solar_app/config/palette.dart';
-import 'package:fluttertoast/fluttertoast.dart';  
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:solar_app/screens/predections_screen.dart';  
 
 
 class InputScreen extends StatefulWidget {
@@ -28,7 +29,7 @@ class _InputScreenState extends State<InputScreen> {
             padding: const EdgeInsets.only(top: 20),
             sliver: SliverToBoxAdapter(
             child: Container(
-                  height: 1000,
+                  height: 1500,
                   decoration: BoxDecoration(
                     color: Palette.backgroundColor,
                     borderRadius: BorderRadius.only(
@@ -119,7 +120,9 @@ class _InputScreenState extends State<InputScreen> {
                             FlatButton(onPressed: () {
                               if(_formKey1.currentState.validate()) { showToast();}
                                 
-                              }, child: Text("Save"),),],), ], ),
+                              }, child: Text("Save", style: TextStyle(
+                                    color: Palette.primaryColor,),),)
+                                    ],), ], ),
                       ExpansionTile(
                             title: Text('Solar Panels'),
                             leading: Image.asset("solar-panel.png"),
@@ -190,7 +193,9 @@ class _InputScreenState extends State<InputScreen> {
                             // ignore: deprecated_member_use
                             FlatButton(onPressed: () { 
                               if(_formKey2.currentState.validate()) { showToast();}
-                            }, child: Text("Save"),),],), ],),
+                            }, child: Text("Save", style: TextStyle(
+                                    color: Palette.primaryColor,),),)
+                                    ],), ],),
                             
                       ExpansionTile(
                             title: Text('Hyperparameters'),
