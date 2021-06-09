@@ -27,7 +27,25 @@ class _PredectionScreenState extends State<PredectionScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Notifications'),
+          title: Text('My Notifications'),
+        ),
+        body: Center(
+          child: ListView(
+            children: const <Widget>[
+              Card(
+                margin: EdgeInsets.all(30.0),
+                child: ListTile(
+                  leading: Icon(Icons.notification_important_sharp),
+                  title: Text(
+                    'Your battery is fully charged',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
