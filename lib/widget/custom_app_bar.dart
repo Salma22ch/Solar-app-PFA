@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solar_app/config/palette.dart';
+import 'package:solar_app/screens/Notificiations.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -16,7 +17,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.notifications_none),
           iconSize: 28.0,
-          onPressed: (){},
+          onPressed: () {()
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PredectionScreen()));
+          },
         ),
       ],
     );
