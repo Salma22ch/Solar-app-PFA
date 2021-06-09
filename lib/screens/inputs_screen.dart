@@ -283,7 +283,9 @@ class _InputScreenState extends State<InputScreen> {
                   fontWeight: FontWeight.w500,
                   color: Palette.accentColor,
                 ),),
-              onPressed: () => {},
+              onPressed: () => {Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PredectionScreen()),
+                  )},
                 ) )
                               ]
       ))))]),

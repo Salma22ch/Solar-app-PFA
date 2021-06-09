@@ -61,6 +61,7 @@ flutter:
     - battery.png
     - solar-panel.png
     - hyperparameters.png
+    - charging.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
