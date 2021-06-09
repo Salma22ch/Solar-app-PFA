@@ -35,9 +35,9 @@ class _PredectionScreenState extends State<PredectionScreen> {
                     border: Border.all(width: 4, color: Palette.primaryColor)),
                 child: Image.asset("charging.png")),
             Text(
-              "You should charge your Battery!!",
+              "You should charge your Battery!",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w400,
                 fontSize: 20,
               ),
             )
