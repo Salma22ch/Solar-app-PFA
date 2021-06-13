@@ -5,11 +5,34 @@ import 'package:solar_app/config/palette.dart';
 import 'package:solar_app/screens/authentification/custom_route.dart';
 import 'package:solar_app/screens/authentification/login.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
-class CustomNavDrawer extends StatelessWidget {
-  final storage = FlutterSecureStorage();
+class CustomNavDrawer extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  _CustomNavDrawerState createState() => _CustomNavDrawerState();
+}
+
+ class _CustomNavDrawerState extends State<CustomNavDrawer> {
+  final storage = FlutterSecureStorage();
+  String useremail="loading";
+  @override
+  void initState() {
+    super.initState();
+    getuseremail();
+  }
+
+  getuseremail() async {
+     String token = await storage.read(key: "token");
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    print(payload["email"]);
+     setState(() {
+       useremail= payload["email"] ;
+     });
+
+
+  }
+  @override
+   Widget build(BuildContext context) {
     return SafeArea(
       child: ClipRRect(
         borderRadius: BorderRadius.only(
@@ -23,7 +46,7 @@ class CustomNavDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _drawerHeader(),
+                  _drawerHeader(useremail),
                   SizedBox(
                     height: 40,
                   ),
@@ -116,7 +139,7 @@ class CustomNavDrawer extends StatelessWidget {
         fontSize: 20, fontWeight: fontWeight, color: Palette.backgroundColor);
   }
 
-  DrawerHeader _drawerHeader() {
+  DrawerHeader _drawerHeader( String mail) {
     return DrawerHeader(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +153,7 @@ class CustomNavDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: Text(
-              "Name Name",
+              mail,
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w600,
