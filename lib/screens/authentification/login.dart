@@ -145,7 +145,7 @@ class _Login extends State<Login> {
                     validate = true;
                    // circular = false;
                   });
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomNavScreen(),),
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomNavScreen()),
                           (route) => false);
                 }
                 }},

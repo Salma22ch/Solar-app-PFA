@@ -8,7 +8,7 @@ import 'package:solar_app/widget/widgets.dart';
 import 'screens.dart';
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({Key key}) : super(key: key);
+  const BottomNavScreen({Key key }) : super(key: key);
 
   @override
   _BottomNavScreenState createState() => _BottomNavScreenState();

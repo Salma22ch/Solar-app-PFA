@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:solar_app/config/palette.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 class PredectionScreen extends StatefulWidget {
   const PredectionScreen({Key key}) : super(key: key);
@@ -10,6 +12,24 @@ class PredectionScreen extends StatefulWidget {
 }
 
 class _PredectionScreenState extends State<PredectionScreen> {
+  final storage = FlutterSecureStorage();
+  String userid="loading";
+  @override
+  void initState() {
+    super.initState();
+    getuserid();
+  }
+
+  getuserid() async {
+    String token = await storage.read(key: "token");
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    print(payload["id"]);
+    setState(() {
+      userid= payload["id"] ;
+    });
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Container(

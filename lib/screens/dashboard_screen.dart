@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:solar_app/config/palette.dart';
 import 'package:solar_app/data/data.dart';
 import 'package:solar_app/widget/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key key}) : super(key: key);
@@ -11,6 +14,24 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final storage = FlutterSecureStorage();
+  String userid="loading";
+  @override
+  void initState() {
+    super.initState();
+    getuserid();
+  }
+
+  getuserid() async {
+    String token = await storage.read(key: "token");
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    print(payload["id"]);
+    setState(() {
+      userid= payload["id"] ;
+    });
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Container(

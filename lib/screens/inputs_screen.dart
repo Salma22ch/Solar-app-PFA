@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solar_app/config/palette.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:solar_app/screens/predections_screen.dart';  
-
+import 'package:solar_app/screens/predections_screen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import '../NetworkHandler.dart';
 
 class InputScreen extends StatefulWidget {
   const InputScreen({Key key}) : super(key: key);
@@ -13,6 +15,40 @@ class InputScreen extends StatefulWidget {
 }
 
 class _InputScreenState extends State<InputScreen> {
+  NetworkHandler networkHandler = NetworkHandler();
+  final storage = FlutterSecureStorage();
+  var response ;
+  String userid="";
+  String email ;
+  TextEditingController _battery1Controller = TextEditingController();
+  TextEditingController _battery2Controller = TextEditingController();
+  TextEditingController _panel1Controller = TextEditingController();
+  TextEditingController _panel2Controller = TextEditingController();
+  @override
+  void initState(){
+    super.initState();
+    getuserid();
+
+  }
+
+  getuserid() async {
+    String token = await storage.read(key: "token");
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    print(payload["id"]);
+    response =await networkHandler.get("/api/user/"+payload["id"]);
+    setState(() {
+      userid= payload["id"] ;
+      _battery1Controller.text="1";
+      _battery2Controller.text ="17";
+      _panel1Controller.text="5";
+      _panel2Controller.text="35";
+    });
+
+   // print(response.statusCode);
+   // print(response.body);
+
+  }
+
 
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
@@ -66,7 +102,8 @@ class _InputScreenState extends State<InputScreen> {
                                 child: Column(
                                 children:[
                                   TextFormField(
-                                  validator: (value) {
+                                    controller: _battery1Controller,
+                                    validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'This field should not be empty!';
                                       }
@@ -90,6 +127,7 @@ class _InputScreenState extends State<InputScreen> {
                                       labelStyle: TextStyle(color: Palette.accentColor)),
                             ),
                               TextFormField(
+                                controller: _battery2Controller,
                                 validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'This field should not be empty!';
@@ -117,8 +155,19 @@ class _InputScreenState extends State<InputScreen> {
                             Row(mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                             // ignore: deprecated_member_use
-                            FlatButton(onPressed: () {
-                              if(_formKey1.currentState.validate()) { showToast();}
+                            FlatButton(onPressed: () async {
+                              if(_formKey1.currentState.validate()) {
+                                Map<String, String> data = {
+                                  "cara1": _battery1Controller.text,
+                                  "cara2": _battery2Controller.text,
+                                };
+                                var responseLogin =await networkHandler.put("/api/user/"+userid+"/battery", data);
+                                print(responseLogin.statusCode);
+                                if (responseLogin.statusCode == 200 ) {
+                                  showToast();
+                                }
+
+                              }
                                 
                               }, child: Text("Save", style: TextStyle(
                                     color: Palette.primaryColor,),),)
@@ -139,6 +188,7 @@ class _InputScreenState extends State<InputScreen> {
                                 child: Column(
                                   children:[
                                 TextFormField(
+                                  controller: _panel1Controller,
                                   validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'This field should not be empty!';
@@ -163,6 +213,7 @@ class _InputScreenState extends State<InputScreen> {
                                         labelStyle: TextStyle(color: Palette.accentColor)),
                               ),
                               TextFormField(
+                                controller: _panel2Controller,
                                 validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'This field should not be empty!';
@@ -191,9 +242,21 @@ class _InputScreenState extends State<InputScreen> {
                             Row(mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget> [
                             // ignore: deprecated_member_use
-                            FlatButton(onPressed: () { 
-                              if(_formKey2.currentState.validate()) { showToast();}
-                            }, child: Text("Save", style: TextStyle(
+                              FlatButton(onPressed: () async {
+                                if(_formKey2.currentState.validate()) {
+                                  Map<String, String> data = {
+                                    "cara1": _battery1Controller.text,
+                                    "cara2": _battery2Controller.text,
+                                  };
+                                  var responseLogin =await networkHandler.put("/api/user/"+userid+"/panels", data);
+                                  print(responseLogin.statusCode);
+                                  if (responseLogin.statusCode == 200 ) {
+                                    showToast();
+                                  }
+
+                                }
+
+                              }, child: Text("Save", style: TextStyle(
                                     color: Palette.primaryColor,),),)
                                     ],), ],),
                             
