@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:solar_app/config/palette.dart';
@@ -21,7 +23,6 @@ class _InputScreenState extends State<InputScreen> {
   String userid="";
   String email ;
   TextEditingController _battery1Controller = TextEditingController();
-  TextEditingController _battery2Controller = TextEditingController();
   TextEditingController _panel1Controller = TextEditingController();
   TextEditingController _panel2Controller = TextEditingController();
   @override
@@ -29,25 +30,29 @@ class _InputScreenState extends State<InputScreen> {
     super.initState();
     getuserid();
 
+
   }
 
   getuserid() async {
     String token = await storage.read(key: "token");
     Map<String, dynamic> payload = Jwt.parseJwt(token);
-    print(payload["id"]);
-    response =await networkHandler.get("/api/user/"+payload["id"]);
+    print(payload);
+
     setState(() {
       userid= payload["id"] ;
-      _battery1Controller.text="1";
-      _battery2Controller.text ="17";
-      _panel1Controller.text="5";
-      _panel2Controller.text="35";
+    });
+    response =await networkHandler.get("/api/user/"+userid);
+    print(jsonDecode(response.body));
+
+    setState(() {
+      _battery1Controller.text=response.body!=null?jsonDecode(response.body)["battery"][0]:"Loading";
+      _panel1Controller.text=response.body!=null?jsonDecode(response.body)["panels"][0]:"Loading";
+      _panel2Controller.text=response.body!=null?jsonDecode(response.body)["panels"][1]:"Loading";
     });
 
-   // print(response.statusCode);
-   // print(response.body);
-
   }
+
+
 
 
   final _formKey1 = GlobalKey<FormState>();
@@ -123,34 +128,10 @@ class _InputScreenState extends State<InputScreen> {
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(color: Palette.primaryColor),
                                       ),
-                                      labelText: 'Capacity',
+                                      labelText: 'Capacity ( KWH )',
                                       labelStyle: TextStyle(color: Palette.accentColor)),
                             ),
-                              TextFormField(
-                                controller: _battery2Controller,
-                                validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'This field should not be empty!';
-                                      }
-                                      return null;
-                                    },
-                              cursorColor: Palette.primaryColor,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly],
-                                  decoration: InputDecoration(
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Palette.primaryColor),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Palette.primaryColor),
-                                      ),
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Palette.primaryColor),
-                                      ),
-                                      labelText: 'Caract 2',
-                                      labelStyle: TextStyle(color: Palette.accentColor)),
-                            ),
+
                                 ]), ),),
                             Row(mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
@@ -159,7 +140,6 @@ class _InputScreenState extends State<InputScreen> {
                               if(_formKey1.currentState.validate()) {
                                 Map<String, String> data = {
                                   "cara1": _battery1Controller.text,
-                                  "cara2": _battery2Controller.text,
                                 };
                                 var responseLogin =await networkHandler.put("/api/user/"+userid+"/battery", data);
                                 print(responseLogin.statusCode);
@@ -209,7 +189,7 @@ class _InputScreenState extends State<InputScreen> {
                                         border: UnderlineInputBorder(
                                           borderSide: BorderSide(color: Palette.primaryColor),
                                         ),
-                                        labelText: 'Carac 1',
+                                        labelText: 'Carac 1 en (KWH)',
                                         labelStyle: TextStyle(color: Palette.accentColor)),
                               ),
                               TextFormField(
@@ -234,7 +214,7 @@ class _InputScreenState extends State<InputScreen> {
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(color: Palette.primaryColor),
                                       ),
-                                      labelText: 'Caract 2',
+                                      labelText: 'Carac 2 en (KWH)',
                                       labelStyle: TextStyle(color: Palette.accentColor)),
                             ),
                             
@@ -245,8 +225,8 @@ class _InputScreenState extends State<InputScreen> {
                               FlatButton(onPressed: () async {
                                 if(_formKey2.currentState.validate()) {
                                   Map<String, String> data = {
-                                    "cara1": _battery1Controller.text,
-                                    "cara2": _battery2Controller.text,
+                                    "cara1": _panel1Controller.text,
+                                    "cara2": _panel2Controller.text,
                                   };
                                   var responseLogin =await networkHandler.put("/api/user/"+userid+"/panels", data);
                                   print(responseLogin.statusCode);
@@ -260,7 +240,7 @@ class _InputScreenState extends State<InputScreen> {
                                     color: Palette.primaryColor,),),)
                                     ],), ],),
                             
-                      ExpansionTile(
+                     /* ExpansionTile(
                             title: Text('Hyperparameters'),
                             leading: Image.asset("hyperparameters.png"),
                             children: [
@@ -331,7 +311,7 @@ class _InputScreenState extends State<InputScreen> {
                                     if(_formKey3.currentState.validate()) { showToast();}
                                   }, child: Text("Save", style: TextStyle(
                                     color: Palette.primaryColor,
-                                ),),),]), ]),
+                                ),),),]), ])*/
                             
                   Padding(padding: const EdgeInsets.all(20), child: ElevatedButton(
                     style: OutlinedButton.styleFrom(

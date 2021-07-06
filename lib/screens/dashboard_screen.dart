@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:solar_app/config/palette.dart';
 import 'package:solar_app/data/data.dart';
 import 'package:solar_app/widget/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+
+import '../NetworkHandler.dart';
 
 
 class DashboardScreen extends StatefulWidget {
@@ -14,8 +18,11 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  NetworkHandler networkHandler = NetworkHandler();
   final storage = FlutterSecureStorage();
+  var response ,battery_state="..." ;
   String userid="loading";
+  String email ;
   @override
   void initState() {
     super.initState();
@@ -29,7 +36,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {
       userid= payload["id"] ;
     });
-
+    response =await networkHandler.get("/api/user/"+userid);
+    print(jsonDecode(response.body));
+    setState(() {
+      battery_state=response!=null?jsonDecode(response.body)["battery"][0]:"...";
+    });
 
   }
   @override
@@ -61,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               sliver: SliverToBoxAdapter(
-                child: StatsGrid(),
+                child: StatsGrid(battery_state :battery_state),
               ),
             ),
             SliverPadding(

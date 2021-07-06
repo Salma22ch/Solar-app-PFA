@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 class StatsGrid extends StatefulWidget {
+  final String battery_state;
+  const StatsGrid ({ Key key, this.battery_state }): super(key: key);
   @override
-  _StatsGridState createState() => _StatsGridState();
+  _StatsGridState createState() => _StatsGridState(this.battery_state);
 }
 
 class _StatsGridState extends State<StatsGrid> {
+  final String  battery_state;
+  _StatsGridState(this.battery_state);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      //height: MediaQuery.of(context).size.height * 0.10,
       height: 100,
       child: Column(
         children: [
@@ -17,7 +21,7 @@ class _StatsGridState extends State<StatsGrid> {
             child: Row(
               children: [
                 _buildStatCard("Consumption", "45 KWH", Colors.blue),
-                _buildStatCard("Battery State", "30 KWH", Colors.red),
+                (battery_state!=null)?_buildStatCard("Battery State", battery_state, Colors.red) : _buildStatCard("Battery State",  "...", Colors.red),
               ],
             ),
           )
