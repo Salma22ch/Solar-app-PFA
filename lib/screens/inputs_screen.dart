@@ -1,7 +1,11 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:solar_app/config/palette.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:solar_app/screens/predections_screen.dart';
@@ -17,6 +21,16 @@ class InputScreen extends StatefulWidget {
 }
 
 class _InputScreenState extends State<InputScreen> {
+  File _file;
+  final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
+
+  Future getFile()async{
+    File file = await FilePicker.getFile();
+
+    setState(() {
+      _file = file;
+    });
+  }
   NetworkHandler networkHandler = NetworkHandler();
   final storage = FlutterSecureStorage();
   var response ;
@@ -337,9 +351,8 @@ class _InputScreenState extends State<InputScreen> {
                          
     
   }
-  
-}
-SliverToBoxAdapter _buildUploadFile() {
+
+  SliverToBoxAdapter _buildUploadFile() {
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -349,9 +362,9 @@ SliverToBoxAdapter _buildUploadFile() {
           children: [
             Flexible(
               child: Text("Consumption of the last week :",style: TextStyle(
-                color: Palette.accentColor,
-                fontSize: 18,
-                fontWeight: FontWeight.w300
+                  color: Palette.accentColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w300
               ),),
             ),
             ElevatedButton(
@@ -359,23 +372,52 @@ SliverToBoxAdapter _buildUploadFile() {
                 backgroundColor: Palette.accentColor,
                 primary: Palette.primaryColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), 
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child: Text("Upload"),
-              onPressed: () => {},
+              onPressed: () {
+                getFile();
+            },
             )
           ],
         ),
       ),
     );
   }
+  void _uploadFile(filePath) async {
+    String fileName = basename(filePath.path);
+    print("file base name:$fileName");
 
-  void showToast() {  
-    Fluttertoast.showToast(  
-        msg: 'Data Saved',  
-        toastLength: Toast.LENGTH_SHORT,  
-        gravity: ToastGravity.BOTTOM,  
-        timeInSecForIos: 1,
-    );  
+    try {
+      FormData formData = new FormData.fromMap({
+        "name": "rajika",
+        "age": 22,
+        "file": await MultipartFile.fromFile(filePath.path, filename: fileName),
+      });
+
+      Response response = await Dio().post("https://sldevzone.000webhostapp.com/uploads.php",data: formData);
+      print("File upload response: $response");
+      _showSnackBarMsg(response.data['message']);
+    } catch (e) {
+      print("expectation Caugch: $e");
+    }
+
+
+
   }
+  void _showSnackBarMsg(String msg){
+    _scaffoldstate.currentState
+        .showSnackBar( new SnackBar(content: new Text(msg),));
+  }
+  void showToast() {
+    Fluttertoast.showToast(
+      msg: 'Data Saved',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIos: 1,
+    );
+  }
+
+
+}
