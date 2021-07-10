@@ -25,7 +25,10 @@ class _InputScreenState extends State<InputScreen> {
   final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
 
   Future getFile()async{
-    File file = await FilePicker.getFile();
+    File file = await FilePicker.getFile(
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
 
     setState(() {
       _file = file;
@@ -254,78 +257,7 @@ class _InputScreenState extends State<InputScreen> {
                                     color: Palette.primaryColor,),),)
                                     ],), ],),
                             
-                     /* ExpansionTile(
-                            title: Text('Hyperparameters'),
-                            leading: Image.asset("hyperparameters.png"),
-                            children: [
-                              Padding(
-                              padding: const EdgeInsets.only(
-                                left:40,
-                                top:20,
-                                right: 70,
-                                bottom: 40,
-                              ),
-                              child: Form(
-                                key: _formKey3,
-                                child: Column(
-                                  children:[
-                                TextFormField(
-                                  validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'This field should not be empty!';
-                                      }
-                                      return null;
-                                    },
-                                cursorColor: Palette.primaryColor,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly],
-                                    decoration: InputDecoration(
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Palette.primaryColor),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Palette.primaryColor),
-                                        ),
-                                        border: UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Palette.primaryColor),
-                                        ),
-                                        labelText: 'Hyperpara 1',
-                                        labelStyle: TextStyle(color: Palette.accentColor)),
-                              ),
-                              TextFormField(
-                                validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'This field should not be empty!';
-                                      }
-                                      return null;
-                                    },
-                              cursorColor: Palette.primaryColor,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly],
-                                  decoration: InputDecoration(
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Palette.primaryColor),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Palette.primaryColor),
-                                      ),
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Palette.primaryColor),
-                                      ),
-                                      labelText: 'Hyperpara 2',
-                                      labelStyle: TextStyle(color: Palette.accentColor)),
-                            ),
-                                ],),),),
-                                Row(mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                  // ignore: deprecated_member_use
-                                  FlatButton(onPressed: () { 
-                                    if(_formKey3.currentState.validate()) { showToast();}
-                                  }, child: Text("Save", style: TextStyle(
-                                    color: Palette.primaryColor,
-                                ),),),]), ])*/
+
                             
                   Padding(padding: const EdgeInsets.all(20), child: ElevatedButton(
                     style: OutlinedButton.styleFrom(
@@ -378,6 +310,7 @@ class _InputScreenState extends State<InputScreen> {
               child: Text("Upload"),
               onPressed: () {
                 getFile();
+              //  _uploadFile(_file);
             },
             )
           ],
@@ -391,12 +324,11 @@ class _InputScreenState extends State<InputScreen> {
 
     try {
       FormData formData = new FormData.fromMap({
-        "name": "rajika",
-        "age": 22,
+        "name": "salma",
         "file": await MultipartFile.fromFile(filePath.path, filename: fileName),
       });
 
-      Response response = await Dio().post("https://sldevzone.000webhostapp.com/uploads.php",data: formData);
+     Response response = await Dio().post("",data: formData);
       print("File upload response: $response");
       _showSnackBarMsg(response.data['message']);
     } catch (e) {
