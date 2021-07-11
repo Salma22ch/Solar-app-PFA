@@ -22,18 +22,18 @@ class InputScreen extends StatefulWidget {
 
 class _InputScreenState extends State<InputScreen> {
   File _file;
-  final GlobalKey<ScaffoldState> _scaffoldstate =
-      new GlobalKey<ScaffoldState>();
+  Dio dio = new Dio();
+  final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
 
-  Future getFile() async {
+  Future<File> getFile()async{
     File file = await FilePicker.getFile(
       type: FileType.custom,
-      allowedExtensions: ['csv'],
+    // allowedExtensions: ['csv'],
     );
-
     setState(() {
       _file = file;
     });
+   return _file;
   }
 
   NetworkHandler networkHandler = NetworkHandler();
@@ -347,13 +347,28 @@ class _InputScreenState extends State<InputScreen> {
                 ),
               ),
               child: Text("Upload"),
-              onPressed: () {
-                getFile();
-                setState(() {
-                  indicator = basename(_file.path);
+              onPressed: () async {
+                File f = await getFile();
+                String fileName = basename(f.path);
+                print(f.path);
+                String uploadurl = "https://backendpfa.herokuapp.com/api/predict";
+                FormData formdata = FormData.fromMap({
+                  "mydata": await MultipartFile.fromFile(
+                      f.path,
+                      filename: basename(f.path)
+                  ),
                 });
-                //  _uploadFile(_file);
-              },
+
+                response = await dio.post(uploadurl,
+                  data: formdata,
+                  );
+
+                if(response.statusCode == 200){
+                  print(response.toString());
+                }else{
+                  print("Error during connection to server.");
+                }
+            },
             )
           ],
         ),
@@ -361,36 +376,9 @@ class _InputScreenState extends State<InputScreen> {
     );
   }
 
-  void _uploadFile(filePath) async {
-    String fileName = basename(filePath.path);
-    print("file base name:$fileName");
-
-    var fileresponse =
-        await networkHandler.patchfile("/add/" + userid + "/file", _file.path);
-    if (fileresponse.statusCode == 200) {
-      print("File upload response successfully");
-      _showSnackBarMsg("File upload response successfully");
-    } else {
-      print("error occured");
-    }
-    /* try {
-      FormData formData = new FormData.fromMap({
-        "name": "salma",
-        "file": await MultipartFile.fromFile(filePath.path, filename: fileName),
-      });
-
-     Response response = await Dio().post("",data: formData);
-      print("File upload response: $response");
-      _showSnackBarMsg(response.data['message']);
-    } catch (e) {
-      print("expectation Caugch: $e");
-    }*/
-  }
-
-  void _showSnackBarMsg(String msg) {
-    _scaffoldstate.currentState.showSnackBar(new SnackBar(
-      content: new Text(msg),
-    ));
+  void _showSnackBarMsg(String msg){
+    _scaffoldstate.currentState
+        .showSnackBar( new SnackBar(content: new Text(msg),));
   }
 
   void showToast() {
