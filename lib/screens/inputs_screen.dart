@@ -64,11 +64,15 @@ class _InputScreenState extends State<InputScreen> {
     print(jsonDecode(response.body));
 
     setState(() {
-      // _battery1Controller.text=response.body!=null?jsonDecode(response.body)["battery"][0]:"Loading";
-      //  _panel1Controller.text=response.body!=null?jsonDecode(response.body)["panels"][0]:"Loading";
-      // _panel2Controller.text = response.body != null
-      //     ? jsonDecode(response.body)["panels"][1]
-      //     : "Loading";
+      _battery1Controller.text = response.body != null
+          ? jsonDecode(response.body)["battery"][0]
+          : "Loading";
+      _panel1Controller.text = response.body != null
+          ? jsonDecode(response.body)["panels"][0]
+          : "Loading";
+      _panel2Controller.text = response.body != null
+          ? jsonDecode(response.body)["panels"][1]
+          : "Loading";
     });
   }
 
