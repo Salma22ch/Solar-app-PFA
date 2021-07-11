@@ -285,6 +285,7 @@ class _InputScreenState extends State<InputScreen> {
   }
 
   SliverToBoxAdapter _buildUploadFile() {
+    String indicator ="Consumption of the last week :";
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -293,7 +294,7 @@ class _InputScreenState extends State<InputScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Flexible(
-              child: Text("Consumption of the last week :",style: TextStyle(
+              child: Text(indicator,style: TextStyle(
                   color: Palette.accentColor,
                   fontSize: 18,
                   fontWeight: FontWeight.w300
@@ -310,6 +311,9 @@ class _InputScreenState extends State<InputScreen> {
               child: Text("Upload"),
               onPressed: () {
                 getFile();
+                setState(() {
+                  indicator=basename(_file.path);
+                });
               //  _uploadFile(_file);
             },
             )
@@ -322,7 +326,14 @@ class _InputScreenState extends State<InputScreen> {
     String fileName = basename(filePath.path);
     print("file base name:$fileName");
 
-    try {
+    var fileresponse = await networkHandler.patchfile("/add/"+userid+"/file", _file.path);
+    if (fileresponse.statusCode == 200) {
+      print("File upload response successfully");
+      _showSnackBarMsg("File upload response successfully");
+    }else{
+      print("error occured");
+    }
+   /* try {
       FormData formData = new FormData.fromMap({
         "name": "salma",
         "file": await MultipartFile.fromFile(filePath.path, filename: fileName),
@@ -333,7 +344,7 @@ class _InputScreenState extends State<InputScreen> {
       _showSnackBarMsg(response.data['message']);
     } catch (e) {
       print("expectation Caugch: $e");
-    }
+    }*/
 
 
 

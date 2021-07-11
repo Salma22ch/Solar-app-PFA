@@ -44,6 +44,16 @@ class NetworkHandler {
     return response;
   }
 
+  Future<http.StreamedResponse> patchfile(String url, String filepath) async {
+    url = formater(url);
+    var request = http.MultipartRequest('PATCH', Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath("csv", filepath));
+    request.headers.addAll({
+      "Content-type": "multipart/form-data",
+    });
+    var response = request.send();
+    return response;
+  }
 
   String formater(String url) {
     return baseurl+url;
