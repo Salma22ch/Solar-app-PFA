@@ -48,24 +48,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-            colors: [Palette.primaryColor, Palette.backgroundColor],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [0.2, 0.9],
-           // tileMode: TileMode.clamp
+          colors: [Palette.primaryColor, Palette.backgroundColor],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [0.2, 0.9],
+          // tileMode: TileMode.clamp
         ),
       ),
       child: Scaffold(
-        backgroundColor:Colors.transparent,
+        backgroundColor: Colors.transparent,
         body: CustomScrollView(
           physics: ClampingScrollPhysics(),
           slivers: <Widget>[
-            //_buildUploadFile(),
             SliverPadding(
               padding: const EdgeInsets.all(20),
               sliver: SliverToBoxAdapter(
-                child: Text("Consumption",style: TextStyle(fontWeight: FontWeight.bold,
-                color: Palette.backgroundColor,fontSize: 25),),
+                child: Text(
+                  "Consumption",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Palette.backgroundColor,
+                      fontSize: 25),
+                ),
               ),
             ),
             _buildTabsOfTreeDays(),
@@ -87,38 +91,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
-  // SliverToBoxAdapter _buildUploadFile() {
-  //   return SliverToBoxAdapter(
-  //     child: Container(
-  //       padding: const EdgeInsets.all(20),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         crossAxisAlignment: CrossAxisAlignment.center,
-  //         children: [
-  //           Flexible(
-  //             child: Text("Upload the consumation of the week:",style: TextStyle(
-  //               color: Palette.backgroundColor,
-  //               fontSize: 20,
-  //               fontWeight: FontWeight.w300
-  //             ),),
-  //           ),
-  //           ElevatedButton(
-  //             style: OutlinedButton.styleFrom(
-  //               backgroundColor: Palette.backgroundColor,
-  //               primary: Palette.primaryColor,
-  //               shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(12), // <-- Radius
-  //               ),
-  //             ),
-  //             child: Text("Upload"),
-  //             onPressed: (){},
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   SliverPadding _buildTabsOfTreeDays() {
     return SliverPadding(

@@ -39,6 +39,7 @@ dependencies:
   dio: ^3.0.8
   path: ^1.6.4
   file_picker: ^1.4.3+2
+  auto_size_text_field: ^0.1.7
 dev_dependencies:
   flutter_test:
     sdk: flutter

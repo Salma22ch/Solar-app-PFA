@@ -54,7 +54,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             return BottomNavigationBar(
               items: [Icons.analytics, Icons.batch_prediction, Icons.adjust]
                   .asMap()
-                  .map((key, value) => MapEntry(
+                  .map(
+                    (key, value) => MapEntry(
                       key,
                       BottomNavigationBarItem(
                         label: "",
@@ -71,7 +72,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                           ),
                           child: Icon(value),
                         ),
-                      )))
+                      ),
+                    ),
+                  )
                   .values
                   .toList(),
               currentIndex: state,
