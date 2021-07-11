@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
@@ -30,10 +31,7 @@ class _InputScreenState extends State<InputScreen> {
       type: FileType.custom,
     // allowedExtensions: ['csv'],
     );
-    setState(() {
-      _file = file;
-    });
-   return _file;
+   return file;
   }
 
   NetworkHandler networkHandler = NetworkHandler();
@@ -61,11 +59,11 @@ class _InputScreenState extends State<InputScreen> {
     response = await networkHandler.get("/api/user/" + userid);
     print(jsonDecode(response.body));
 
-    // setState(() {
-    //   _battery1Controller.text=response.body!=null?jsonDecode(response.body)["battery"][0]:"Loading";
-    //   _panel1Controller.text=response.body!=null?jsonDecode(response.body)["panels"][0]:"Loading";
-    //   _panel2Controller.text=response.body!=null?jsonDecode(response.body)["panels"][1]:"Loading";
-    // });
+    setState(() {
+    _battery1Controller.text=response.body!=null?jsonDecode(response.body)["battery"][0]:"Loading";
+     _panel1Controller.text=response.body!=null?jsonDecode(response.body)["panels"][0]:"Loading";
+      _panel2Controller.text=response.body!=null?jsonDecode(response.body)["panels"][1]:"Loading";
+    });
   }
 
   final _formKey1 = GlobalKey<FormState>();
@@ -307,12 +305,18 @@ class _InputScreenState extends State<InputScreen> {
                                 color: Palette.accentColor,
                               ),
                             ),
-                            onPressed: () => {
+                            onPressed: () async {
+                              var response = await predictdata() ;
+                              if(response.statusCode == 200){
+                                print(response.toString());
+                              }else{
+                                print("Error during connection to server.");
+                              }
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => PredectionScreen()),
-                              )
+                              );
                             },
                           ))
                     ]))))
@@ -349,25 +353,10 @@ class _InputScreenState extends State<InputScreen> {
               child: Text("Upload"),
               onPressed: () async {
                 File f = await getFile();
-                String fileName = basename(f.path);
-                print(f.path);
-                String uploadurl = "https://backendpfa.herokuapp.com/api/predict";
-                FormData formdata = FormData.fromMap({
-                  "mydata": await MultipartFile.fromFile(
-                      f.path,
-                      filename: basename(f.path)
-                  ),
+                setState(() {
+                  _file =f ;
                 });
 
-                response = await dio.post(uploadurl,
-                  data: formdata,
-                  );
-
-                if(response.statusCode == 200){
-                  print(response.toString());
-                }else{
-                  print("Error during connection to server.");
-                }
             },
             )
           ],
@@ -381,6 +370,24 @@ class _InputScreenState extends State<InputScreen> {
         .showSnackBar( new SnackBar(content: new Text(msg),));
   }
 
+   predictdata() async {
+    String fileName = basename(_file.path);
+    print(_file.path);
+    String uploadurl = "https://backendpfa.herokuapp.com/api/predict";
+    FormData formdata = FormData.fromMap({
+      "mydata": await MultipartFile.fromFile(
+          _file.path,
+          filename: basename(_file.path)
+      ),
+    });
+
+    response = await dio.post(uploadurl,
+      data: formdata,
+    );
+
+    return response ;
+
+  }
   void showToast() {
     Fluttertoast.showToast(
       msg: 'Data Saved',
