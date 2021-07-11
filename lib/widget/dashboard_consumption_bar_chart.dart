@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:solar_app/config/palette.dart';
 
 class ConsumptionBarChart extends StatelessWidget {
-  final List<double> consumtions;
+  final List<String> consumtions;
 
   const ConsumptionBarChart({this.consumtions});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      height: 600,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -39,7 +39,7 @@ class ConsumptionBarChart extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: BarChart(
                 BarChartData(
-                  maxY: 16,
+                  maxY: 2000,
                   barTouchData: BarTouchData(enabled: false),
                   alignment: BarChartAlignment.spaceAround,
                   titlesData: FlTitlesData(
@@ -51,19 +51,19 @@ class ConsumptionBarChart extends StatelessWidget {
                       getTitles: (double value) {
                         switch (value.toInt()) {
                           case 0:
-                            return 'May 24';
+                            return '';
                           case 1:
-                            return 'May 24';
+                            return '';
                           case 2:
-                            return 'May 24';
+                            return '';
                           case 3:
-                            return 'May 24';
+                            return '';
                           case 4:
-                            return 'May 24';
+                            return '';
                           case 5:
-                            return 'May 24';
+                            return '';
                           case 6:
-                            return 'May 24';
+                            return '';
                           default:
                             return "";
                         }
@@ -75,17 +75,14 @@ class ConsumptionBarChart extends StatelessWidget {
                     ),
                   ),
                   gridData: FlGridData(
-                    show: true,
-                    checkToShowHorizontalLine: (value)=> value % 3 ==0,
-                    getDrawingHorizontalLine: (value)=>FlLine(
-                      color: Colors.black12,
-                      strokeWidth: 1.0,
-                      dashArray: [5],
-                    )
-                  ),
-                  borderData: FlBorderData(
-                    show: false
-                  ),
+                      show: true,
+                      checkToShowHorizontalLine: (value) => value % 3 == 0,
+                      getDrawingHorizontalLine: (value) => FlLine(
+                            color: Colors.black12,
+                            strokeWidth: 1.0,
+                            dashArray: [5],
+                          )),
+                  borderData: FlBorderData(show: false),
                   barGroups: consumtions
                       .asMap()
                       .map(
@@ -95,7 +92,7 @@ class ConsumptionBarChart extends StatelessWidget {
                             x: key,
                             barRods: [
                               BarChartRodData(
-                                y: value,
+                                y: double.parse(value),
                                 colors: [Palette.accentColor],
                               ),
                             ],

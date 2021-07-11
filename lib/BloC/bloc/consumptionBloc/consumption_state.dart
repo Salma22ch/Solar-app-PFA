@@ -12,12 +12,12 @@ class ConsumptionInitial extends ConsumptionState {}
 class ConsumptionLoading extends ConsumptionState {}
 
 class ConsumptionLoaded extends ConsumptionState {
-  final List predictedConsumption;
+  final List<dynamic> predictedConsumptionList;
 
-  const ConsumptionLoaded([this.predictedConsumption = const []]);
+  const ConsumptionLoaded([this.predictedConsumptionList = const []]);
 
   @override
-  List<Object> get props => [predictedConsumption];
+  List<Object> get props => [predictedConsumptionList];
 }
 
 class ConsumptionNotLoaded extends ConsumptionState {}

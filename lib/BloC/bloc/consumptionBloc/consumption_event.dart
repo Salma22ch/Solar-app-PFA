@@ -11,7 +11,7 @@ abstract class ConsumptionEvent extends Equatable {
 class LoadPrevConsumption extends ConsumptionEvent {}
 
 class PrevConsumptionLoaded extends ConsumptionEvent {
-  final List predcitionConsumptionList;
+  final List<dynamic> predcitionConsumptionList;
   const PrevConsumptionLoaded(this.predcitionConsumptionList);
   @override
   List<Object> get props => [predcitionConsumptionList];

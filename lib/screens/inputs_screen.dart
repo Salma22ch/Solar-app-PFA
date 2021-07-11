@@ -1,14 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:solar_app/BloC/bloc/consumptionBloc/consumption_bloc.dart';
 import 'package:solar_app/config/palette.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:solar_app/screens/dashboard_screen.dart';
 import 'package:solar_app/screens/predections_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -24,14 +27,15 @@ class InputScreen extends StatefulWidget {
 class _InputScreenState extends State<InputScreen> {
   File _file;
   Dio dio = new Dio();
-  final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldstate =
+      new GlobalKey<ScaffoldState>();
 
-  Future<File> getFile()async{
+  Future<File> getFile() async {
     File file = await FilePicker.getFile(
       type: FileType.custom,
-    // allowedExtensions: ['csv'],
+      // allowedExtensions: ['csv'],
     );
-   return file;
+    return file;
   }
 
   NetworkHandler networkHandler = NetworkHandler();
@@ -60,9 +64,11 @@ class _InputScreenState extends State<InputScreen> {
     print(jsonDecode(response.body));
 
     setState(() {
-    _battery1Controller.text=response.body!=null?jsonDecode(response.body)["battery"][0]:"Loading";
-     _panel1Controller.text=response.body!=null?jsonDecode(response.body)["panels"][0]:"Loading";
-      _panel2Controller.text=response.body!=null?jsonDecode(response.body)["panels"][1]:"Loading";
+      // _battery1Controller.text=response.body!=null?jsonDecode(response.body)["battery"][0]:"Loading";
+      //  _panel1Controller.text=response.body!=null?jsonDecode(response.body)["panels"][0]:"Loading";
+      // _panel2Controller.text = response.body != null
+      //     ? jsonDecode(response.body)["panels"][1]
+      //     : "Loading";
     });
   }
 
@@ -306,16 +312,23 @@ class _InputScreenState extends State<InputScreen> {
                               ),
                             ),
                             onPressed: () async {
-                              var response = await predictdata() ;
-                              if(response.statusCode == 200){
+                              //--------------------------- Emit list to bloc ---------------------------------
+                              var response = await predictdata();
+
+                              BlocProvider.of<ConsumptionBloc>(context).emit(
+                                  ConsumptionLoaded(
+                                      response.data["dataPredicted"]));
+                              //------------------------------------------------------------
+
+                              if (response.statusCode == 200) {
                                 print(response.toString());
-                              }else{
+                              } else {
                                 print("Error during connection to server.");
                               }
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PredectionScreen()),
+                                    builder: (context) => DashboardScreen()),
                               );
                             },
                           ))
@@ -354,10 +367,9 @@ class _InputScreenState extends State<InputScreen> {
               onPressed: () async {
                 File f = await getFile();
                 setState(() {
-                  _file =f ;
+                  _file = f;
                 });
-
-            },
+              },
             )
           ],
         ),
@@ -365,29 +377,29 @@ class _InputScreenState extends State<InputScreen> {
     );
   }
 
-  void _showSnackBarMsg(String msg){
-    _scaffoldstate.currentState
-        .showSnackBar( new SnackBar(content: new Text(msg),));
+  void _showSnackBarMsg(String msg) {
+    _scaffoldstate.currentState.showSnackBar(new SnackBar(
+      content: new Text(msg),
+    ));
   }
 
-   predictdata() async {
+  predictdata() async {
     String fileName = basename(_file.path);
     print(_file.path);
     String uploadurl = "https://backendpfa.herokuapp.com/api/predict";
     FormData formdata = FormData.fromMap({
-      "mydata": await MultipartFile.fromFile(
-          _file.path,
-          filename: basename(_file.path)
-      ),
+      "mydata": await MultipartFile.fromFile(_file.path,
+          filename: basename(_file.path)),
     });
 
-    response = await dio.post(uploadurl,
+    response = await dio.post(
+      uploadurl,
       data: formdata,
     );
 
-    return response ;
-
+    return response;
   }
+
   void showToast() {
     Fluttertoast.showToast(
       msg: 'Data Saved',

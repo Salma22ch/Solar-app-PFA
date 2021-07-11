@@ -28,6 +28,7 @@ class ConsumptionBloc extends Bloc<ConsumptionEvent, ConsumptionState> {
     // _wuserRepositorySubscription?.cancel();
     // _wuserRepositorySubscription =
     //     _userRepository.user().listen((event) => add(UserUpdated(event)));
+    yield ConsumptionLoading();
   }
 
   Stream<ConsumptionState> _mapPrevConsumptionLoadedToState(
