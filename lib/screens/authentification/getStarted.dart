@@ -11,7 +11,7 @@ class GetStarted extends StatelessWidget {
         itemCount: 1,
         itemBuilder: (context, index) {
           return SliderTile(
-              "assets/getStartedShape.png", "APP Name", "Description ");
+              "assets/getStartedShape.png", "Energy Predictor", "Predict your energy consumption and production!");
         },
       ),
     );
