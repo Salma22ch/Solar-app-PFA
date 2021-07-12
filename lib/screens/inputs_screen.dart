@@ -354,10 +354,16 @@ class _InputScreenState extends State<InputScreen> {
                                 } else {
                                   print("Error during connection to server.");
                                 }
+                                Map<String, List> data = {
+                                  "week": response.data["dataPredicted"].map((e) => e.toString())
+                                      .toList(),
+                                };
+                                BlocProvider.of<ScreenindexBloc>(context)
+                                    .add(GetIndex(0));
+                                var responsecon = await networkHandler.putcons("/api/user/" + userid + "/consumption",data );
                               }
 
-                              BlocProvider.of<ScreenindexBloc>(context)
-                                  .add(GetIndex(0));
+
                             },
                           ))
                     ]))))
