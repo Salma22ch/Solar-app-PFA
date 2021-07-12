@@ -39,10 +39,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
     response = await networkHandler.get("/api/user/" + userid);
     print(jsonDecode(response.body));
-    setState(() {
-      battery_state =
-          response != null ? jsonDecode(response.body)["battery"][0] : "...";
-    });
+    // setState(() {
+    //   battery_state =
+    //       response != null ? jsonDecode(response.body)["battery"][0] : "...";
+    // });
   }
 
   @override

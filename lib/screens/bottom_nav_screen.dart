@@ -25,74 +25,63 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   ];
   int _currentIndex = 0;
 
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     _currentIndex = index;
-  //   });
-  //   // final weatherBloc = BlocProvider.of<ScreenindexBloc>(context).add(GetIndex(index));;
-  //   // // Initiate getting the weather
-  //   // weatherBloc.add(GetIndex(index));
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return
+    return BlocProvider(
+        create: (context) => indexingBloc,
+        child: Scaffold(
+          appBar: CustomAppBar(),
+          drawer: CustomNavDrawer(),
+          //body: _screens[_currentIndex],
+          body: BlocBuilder(
+            bloc: indexingBloc,
+            builder: (context, state) {
+              return _screens[state];
+            },
+          ),
 
-        // BlocProvider(
-        //   create: (context) => indexingBloc,
-        Scaffold(
-      appBar: CustomAppBar(),
-      drawer: CustomNavDrawer(),
-      //body: _screens[_currentIndex],
-      body: BlocBuilder(
-        bloc: indexingBloc,
-        builder: (context, state) {
-          return _screens[state];
-        },
-      ),
-
-      bottomNavigationBar: BlocBuilder(
-        bloc: indexingBloc,
-        builder: (context, state) {
-          return BottomNavigationBar(
-            items: [Icons.analytics, Icons.batch_prediction, Icons.adjust]
-                .asMap()
-                .map(
-                  (key, value) => MapEntry(
-                    key,
-                    BottomNavigationBarItem(
-                      label: "",
-                      icon: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 8,
+          bottomNavigationBar: BlocBuilder(
+            bloc: indexingBloc,
+            builder: (context, state) {
+              return BottomNavigationBar(
+                items: [Icons.analytics, Icons.batch_prediction, Icons.adjust]
+                    .asMap()
+                    .map(
+                      (key, value) => MapEntry(
+                        key,
+                        BottomNavigationBarItem(
+                          label: "",
+                          icon: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: state == key
+                                  ? Palette.primaryColor
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Icon(value),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: state == key
-                              ? Palette.primaryColor
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: Icon(value),
                       ),
-                    ),
-                  ),
-                )
-                .values
-                .toList(),
-            currentIndex: state,
-            selectedItemColor: Palette.backgroundColor,
-            unselectedItemColor: Colors.grey,
-            backgroundColor: Palette.backgroundColor,
-            type: BottomNavigationBarType.fixed,
-            elevation: 0,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            //onTap: _onItemTapped,
-            onTap: (index) => indexingBloc.add(GetIndex(index)),
-          );
-        },
-      ),
-    );
+                    )
+                    .values
+                    .toList(),
+                currentIndex: state,
+                selectedItemColor: Palette.backgroundColor,
+                unselectedItemColor: Colors.grey,
+                backgroundColor: Palette.backgroundColor,
+                type: BottomNavigationBarType.fixed,
+                elevation: 0,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                //onTap: _onItemTapped,
+                onTap: (index) => indexingBloc.add(GetIndex(index)),
+              );
+            },
+          ),
+        ));
   }
 }

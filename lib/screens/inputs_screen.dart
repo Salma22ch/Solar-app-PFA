@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:solar_app/BloC/bloc/consumptionBloc/consumption_bloc.dart';
+import 'package:solar_app/BloC/bloc/screenindex_bloc.dart';
 import 'package:solar_app/config/palette.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:solar_app/screens/dashboard_screen.dart';
@@ -29,23 +30,22 @@ class _InputScreenState extends State<InputScreen> {
   Dio dio = new Dio();
   String indicator = "Consumption of the last week :";
 
-
   Future<File> getFile() async {
     setState(() {
-      indicator ='loading ...';
+      indicator = 'loading ...';
     });
     File file = await FilePicker.getFile(
       type: FileType.custom,
       // allowedExtensions: ['csv'],
     );
 
-    if (file!=null)
+    if (file != null)
       setState(() {
-       indicator =basename(file.path);
-       });
+        indicator = basename(file.path);
+      });
     else
       setState(() {
-        indicator ='no file chosen ' ;
+        indicator = 'no file chosen ';
       });
     return file;
   }
@@ -74,10 +74,16 @@ class _InputScreenState extends State<InputScreen> {
     });
     response = await networkHandler.get("/api/user/" + userid);
     print(jsonDecode(response.body));
-    _battery1Controller.text = response!= null ? jsonDecode(response.body)["battery"][0] : "Loading";
-    _panel1Controller.text = response!= null ? jsonDecode(response.body)["panels"][0] : "Loading";
-    _panel2Controller.text = response!= null ? jsonDecode(response.body)["panels"][1] : "Loading";
 
+    _battery1Controller.text = response.body != null
+        ? jsonDecode(response.body)["battery"][0]
+        : "Loading";
+    _panel1Controller.text = response.body != null
+        ? jsonDecode(response.body)["panels"][0]
+        : "Loading";
+    _panel2Controller.text = response.body != null
+        ? jsonDecode(response.body)["panels"][1]
+        : "Loading";
   }
 
   final _formKey1 = GlobalKey<FormState>();
@@ -321,20 +327,23 @@ class _InputScreenState extends State<InputScreen> {
                             ),
                             onPressed: () async {
                               //--------------------------- Emit list to bloc ---------------------------------
-                              if(_file==null)  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("You should upload a csv file before prediction"),
-                               ));
+                              if (_file == null)
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      "You should upload a csv file before prediction"),
+                                ));
                               else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text("Data is being processed"),
-                                    ));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Data is being processed"),
+                                ));
                                 var response = await predictdata();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          "Data is predicted sucessfully "),
-                                    ));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content:
+                                      Text("Data is predicted sucessfully "),
+                                ));
                                 BlocProvider.of<ConsumptionBloc>(context).emit(
                                     ConsumptionLoaded(
                                         response.data["dataPredicted"]));
@@ -345,12 +354,10 @@ class _InputScreenState extends State<InputScreen> {
                                 } else {
                                   print("Error during connection to server.");
                                 }
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => DashboardScreen()),
-                                );
                               }
+
+                              BlocProvider.of<ScreenindexBloc>(context)
+                                  .add(GetIndex(0));
                             },
                           ))
                     ]))))
@@ -359,7 +366,6 @@ class _InputScreenState extends State<InputScreen> {
   }
 
   SliverToBoxAdapter _buildUploadFile() {
-
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -397,8 +403,6 @@ class _InputScreenState extends State<InputScreen> {
       ),
     );
   }
-
-
 
   predictdata() async {
     print(_file.path);

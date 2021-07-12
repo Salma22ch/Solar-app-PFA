@@ -42,11 +42,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final indexingBloc = ScreenindexBloc();
-
     return MultiBlocProvider(
         providers: [
-          BlocProvider<ScreenindexBloc>(create: (context) => indexingBloc),
+          BlocProvider<ScreenindexBloc>(create: (context) => ScreenindexBloc()),
           BlocProvider<ConsumptionBloc>(
             create: (context) {
               return ConsumptionBloc();

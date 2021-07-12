@@ -12,9 +12,9 @@ class CustomNavDrawer extends StatefulWidget {
   _CustomNavDrawerState createState() => _CustomNavDrawerState();
 }
 
- class _CustomNavDrawerState extends State<CustomNavDrawer> {
+class _CustomNavDrawerState extends State<CustomNavDrawer> {
   final storage = FlutterSecureStorage();
-  String useremail="loading";
+  String useremail = "loading";
   @override
   void initState() {
     super.initState();
@@ -22,17 +22,16 @@ class CustomNavDrawer extends StatefulWidget {
   }
 
   getuseremail() async {
-     String token = await storage.read(key: "token");
+    String token = await storage.read(key: "token");
     Map<String, dynamic> payload = Jwt.parseJwt(token);
     print(payload["email"]);
-     setState(() {
-       useremail= payload["email"] ;
-     });
-
-
+    setState(() {
+      useremail = payload["email"];
+    });
   }
+
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return SafeArea(
       child: ClipRRect(
         borderRadius: BorderRadius.only(
@@ -46,7 +45,8 @@ class CustomNavDrawer extends StatefulWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _drawerHeader(useremail),
+                  _drawerHeader("HDZDHEDE"),
+                  //_drawerHeader(useremail),
                   SizedBox(
                     height: 40,
                   ),
@@ -139,7 +139,7 @@ class CustomNavDrawer extends StatefulWidget {
         fontSize: 20, fontWeight: fontWeight, color: Palette.backgroundColor);
   }
 
-  DrawerHeader _drawerHeader( String mail) {
+  DrawerHeader _drawerHeader(String mail) {
     return DrawerHeader(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
