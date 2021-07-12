@@ -80,7 +80,7 @@ class _PredectionScreenState extends State<PredectionScreen> {
                 padding: const EdgeInsets.all(20.0),
                 child: Center(
                     child: Text(
-                  "There is No Data Exist To make Decisions",
+                  "You did not insert your past consumption and solar production data yet!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
