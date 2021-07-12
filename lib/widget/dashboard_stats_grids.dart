@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:solar_app/BloC/bloc/consumptionBloc/consumption_bloc.dart';
 
 class StatsGrid extends StatefulWidget {
   final String battery_state;
-  const StatsGrid ({ Key key, this.battery_state }): super(key: key);
+  const StatsGrid({Key key, this.battery_state}) : super(key: key);
   @override
   _StatsGridState createState() => _StatsGridState(this.battery_state);
 }
 
 class _StatsGridState extends State<StatsGrid> {
-  final String  battery_state;
+  final String battery_state;
   _StatsGridState(this.battery_state);
 
   @override
@@ -20,8 +22,19 @@ class _StatsGridState extends State<StatsGrid> {
           Flexible(
             child: Row(
               children: [
-                _buildStatCard("Consumption", "45 KWH", Colors.blue),
-                (battery_state!=null)?_buildStatCard("Battery State", battery_state, Colors.red) : _buildStatCard("Battery State",  "...", Colors.red),
+                BlocBuilder<ConsumptionBloc, ConsumptionState>(
+                  builder: (context, state) {
+                    if (state is ConsumptionLoaded) {
+                      return _buildStatCard(
+                          "Consumption",
+                          state.predictedConsumptionList[1].toString(),
+                          Colors.blue);
+                    } else {
+                      return _buildStatCard("Consumption", "--", Colors.blue);
+                    }
+                  },
+                ),
+                _buildStatCard("Solar Production", "00 KW", Colors.red)
               ],
             ),
           )

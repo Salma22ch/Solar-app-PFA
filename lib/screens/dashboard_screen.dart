@@ -125,13 +125,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       padding: const EdgeInsets.all(20),
       sliver: SliverToBoxAdapter(
         child: DefaultTabController(
-          length: 3,
+          length: 1,
           child: TabBar(
             indicatorColor: Colors.transparent,
             //labelStyle: Styles.tabTextStyle,
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white60,
-            tabs: [Text("Yesterday"), Text("Today"), Text("Tomorrow")],
+            //tabs: [Text("Yesterday"), Text("Today"), Text("Tomorrow")],
+            tabs: [Text("Tomorrow")],
             onTap: (index) {},
           ),
         ),
