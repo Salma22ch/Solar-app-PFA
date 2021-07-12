@@ -39,10 +39,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
     response = await networkHandler.get("/api/user/" + userid);
     print(jsonDecode(response.body));
-    // setState(() {
-    //   battery_state =
-    //       response != null ? jsonDecode(response.body)["battery"][0] : "...";
-    // });
   }
 
   @override
@@ -95,23 +91,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             consumtions: ["0", "0", "0", "0", "0", "0", "0"]),
                   ),
                 )
-                // BlocBuilder<ConsumptionBloc, ConsumptionState>(
-                //   builder: (context, state) {
-                //     if (state is ConsumptionLoaded) {
-                //       return SliverPadding(
-                //         padding: const EdgeInsets.only(top: 20),
-                //         sliver: SliverToBoxAdapter(
-                //           child:
-                //               //ConsumptionBarChart(consumtions: dailyConsumptionOftheWeek),
-                //               ConsumptionBarChart(
-                //                   consumtions: state.predictedConsumptionList),
-                //         ),
-                //       );
-                //     } else {
-                //       return Center(child: Text("MAZAL"));
-                //     }
-                //   },
-                // ),
               ],
             );
           },

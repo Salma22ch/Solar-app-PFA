@@ -45,8 +45,8 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _drawerHeader("HDZDHEDE"),
-                  //_drawerHeader(useremail),
+                  //_drawerHeader("HDZDHEDE"),
+                  _drawerHeader(useremail),
                   SizedBox(
                     height: 40,
                   ),
@@ -155,7 +155,7 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
             child: Text(
               mail,
               style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600,
                   color: Palette.accentColor),
             ),

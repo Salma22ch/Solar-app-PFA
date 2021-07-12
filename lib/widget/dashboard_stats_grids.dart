@@ -27,11 +27,11 @@ class _StatsGridState extends State<StatsGrid> {
                     children: [
                       _buildStatCard(
                           "Consumption",
-                          state.predictedConsumptionList[1].toString(),
+                          state.predictedConsumptionList[0].toString(),
                           Colors.blue),
                       _buildStatCard(
                           "Solar Production",
-                          state.predictedProductionList[1].toString(),
+                          state.predictedProductionList[0].toString(),
                           Colors.red)
                     ],
                   );

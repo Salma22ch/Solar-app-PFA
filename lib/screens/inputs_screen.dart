@@ -349,6 +349,8 @@ class _InputScreenState extends State<InputScreen> {
                                         response.data["consumptionPredictions"],
                                         response.data[
                                             "solarProductionPredictions"]));
+                                BlocProvider.of<ScreenindexBloc>(context)
+                                    .add(GetIndex(0));
                                 //------------------------------------------------------------
 
                                 if (response.statusCode == 200) {
@@ -362,11 +364,19 @@ class _InputScreenState extends State<InputScreen> {
                                       .map((e) => e.toString())
                                       .toList(),
                                 };
-                                BlocProvider.of<ScreenindexBloc>(context)
-                                    .add(GetIndex(0));
+                                Map<String, List> data2 = {
+                                  "week": response
+                                      .data["solarProductionPredictions"]
+                                      .map((e) => e.toString())
+                                      .toList(),
+                                };
+
                                 var responsecon = await networkHandler.putcons(
                                     "/api/user/" + userid + "/consumption",
                                     data);
+                                var responsepro = await networkHandler.putcons(
+                                    "/api/user/" + userid + "/production",
+                                    data2);
                               }
                             },
                           ))
