@@ -28,8 +28,7 @@ class _InputScreenState extends State<InputScreen> {
   File _file;
   Dio dio = new Dio();
   String indicator = "Consumption of the last week :";
-  final GlobalKey<ScaffoldState> _scaffoldstate =
-      new GlobalKey<ScaffoldState>();
+
 
   Future<File> getFile() async {
     setState(() {
@@ -322,23 +321,36 @@ class _InputScreenState extends State<InputScreen> {
                             ),
                             onPressed: () async {
                               //--------------------------- Emit list to bloc ---------------------------------
-                              var response = await predictdata();
+                              if(_file==null)  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("You should upload a csv file before prediction"),
+                               ));
+                              else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Data is being processed"),
+                                    ));
+                                var response = await predictdata();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          "Data is predicted sucessfully "),
+                                    ));
+                                BlocProvider.of<ConsumptionBloc>(context).emit(
+                                    ConsumptionLoaded(
+                                        response.data["dataPredicted"]));
+                                //------------------------------------------------------------
 
-                              BlocProvider.of<ConsumptionBloc>(context).emit(
-                                  ConsumptionLoaded(
-                                      response.data["dataPredicted"]));
-                              //------------------------------------------------------------
-
-                              if (response.statusCode == 200) {
-                                print(response.toString());
-                              } else {
-                                print("Error during connection to server.");
+                                if (response.statusCode == 200) {
+                                  print(response.toString());
+                                } else {
+                                  print("Error during connection to server.");
+                                }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DashboardScreen()),
+                                );
                               }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DashboardScreen()),
-                              );
                             },
                           ))
                     ]))))
@@ -386,14 +398,9 @@ class _InputScreenState extends State<InputScreen> {
     );
   }
 
-  void _showSnackBarMsg(String msg) {
-    _scaffoldstate.currentState.showSnackBar(new SnackBar(
-      content: new Text(msg),
-    ));
-  }
+
 
   predictdata() async {
-    String fileName = basename(_file.path);
     print(_file.path);
     String uploadurl = "https://backendpfa.herokuapp.com/api/predict";
     FormData formdata = FormData.fromMap({
