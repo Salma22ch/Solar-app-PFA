@@ -20,22 +20,31 @@ class _StatsGridState extends State<StatsGrid> {
       child: Column(
         children: [
           Flexible(
-            child: Row(
-              children: [
-                BlocBuilder<ConsumptionBloc, ConsumptionState>(
-                  builder: (context, state) {
-                    if (state is ConsumptionLoaded) {
-                      return _buildStatCard(
+            child: BlocBuilder<ConsumptionBloc, ConsumptionState>(
+              builder: (context, state) {
+                if (state is ConsumptionLoaded) {
+                  return Row(
+                    children: [
+                      _buildStatCard(
                           "Consumption",
                           state.predictedConsumptionList[1].toString(),
-                          Colors.blue);
-                    } else {
-                      return _buildStatCard("Consumption", "--", Colors.blue);
-                    }
-                  },
-                ),
-                _buildStatCard("Solar Production", "00 KW", Colors.red)
-              ],
+                          Colors.blue),
+                      _buildStatCard(
+                          "Solar Production",
+                          state.predictedProductionList[1].toString(),
+                          Colors.red)
+                    ],
+                  );
+                } else {
+                  return Row(
+                    children: [
+                      _buildStatCard(
+                          "Consumption", "---".toString(), Colors.blue),
+                      _buildStatCard("Solar Production", "---", Colors.red)
+                    ],
+                  );
+                }
+              },
             ),
           )
         ],

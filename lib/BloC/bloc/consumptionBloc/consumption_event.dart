@@ -12,7 +12,10 @@ class LoadPrevConsumption extends ConsumptionEvent {}
 
 class PrevConsumptionLoaded extends ConsumptionEvent {
   final List<dynamic> predcitionConsumptionList;
-  const PrevConsumptionLoaded(this.predcitionConsumptionList);
+  final List<dynamic> predictedProductionList;
+
+  const PrevConsumptionLoaded(
+      this.predcitionConsumptionList, this.predictedProductionList);
   @override
   List<Object> get props => [predcitionConsumptionList];
 }

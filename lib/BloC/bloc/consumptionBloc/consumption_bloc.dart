@@ -10,7 +10,7 @@ part 'consumption_state.dart';
 class ConsumptionBloc extends Bloc<ConsumptionEvent, ConsumptionState> {
   ConsumptionBloc() : super(ConsumptionInitial());
 
-  // final UserRepository _userRepository;
+  //final UserRepository _userRepository;
   // StreamSubscription? _wuserRepositorySubscription;
 
   @override

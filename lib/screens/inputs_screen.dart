@@ -346,7 +346,9 @@ class _InputScreenState extends State<InputScreen> {
                                 ));
                                 BlocProvider.of<ConsumptionBloc>(context).emit(
                                     ConsumptionLoaded(
-                                        response.data["dataPredicted"]));
+                                        response.data["consumptionPredictions"],
+                                        response.data[
+                                            "solarProductionPredictions"]));
                                 //------------------------------------------------------------
 
                                 if (response.statusCode == 200) {
@@ -355,15 +357,17 @@ class _InputScreenState extends State<InputScreen> {
                                   print("Error during connection to server.");
                                 }
                                 Map<String, List> data = {
-                                  "week": response.data["dataPredicted"].map((e) => e.toString())
+                                  "week": response
+                                      .data["consumptionPredictions"]
+                                      .map((e) => e.toString())
                                       .toList(),
                                 };
                                 BlocProvider.of<ScreenindexBloc>(context)
                                     .add(GetIndex(0));
-                                var responsecon = await networkHandler.putcons("/api/user/" + userid + "/consumption",data );
+                                var responsecon = await networkHandler.putcons(
+                                    "/api/user/" + userid + "/consumption",
+                                    data);
                               }
-
-
                             },
                           ))
                     ]))))
