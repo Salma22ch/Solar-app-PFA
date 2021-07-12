@@ -27,14 +27,27 @@ class InputScreen extends StatefulWidget {
 class _InputScreenState extends State<InputScreen> {
   File _file;
   Dio dio = new Dio();
+  String indicator = "Consumption of the last week :";
   final GlobalKey<ScaffoldState> _scaffoldstate =
       new GlobalKey<ScaffoldState>();
 
   Future<File> getFile() async {
+    setState(() {
+      indicator ='loading ...';
+    });
     File file = await FilePicker.getFile(
       type: FileType.custom,
       // allowedExtensions: ['csv'],
     );
+
+    if (file!=null)
+      setState(() {
+       indicator =basename(file.path);
+       });
+    else
+      setState(() {
+        indicator ='no file chosen ' ;
+      });
     return file;
   }
 
@@ -62,18 +75,10 @@ class _InputScreenState extends State<InputScreen> {
     });
     response = await networkHandler.get("/api/user/" + userid);
     print(jsonDecode(response.body));
+    _battery1Controller.text = response!= null ? jsonDecode(response.body)["battery"][0] : "Loading";
+    _panel1Controller.text = response!= null ? jsonDecode(response.body)["panels"][0] : "Loading";
+    _panel2Controller.text = response!= null ? jsonDecode(response.body)["panels"][1] : "Loading";
 
-    setState(() {
-      _battery1Controller.text = response.body != null
-          ? jsonDecode(response.body)["battery"][0]
-          : "Loading";
-      _panel1Controller.text = response.body != null
-          ? jsonDecode(response.body)["panels"][0]
-          : "Loading";
-      _panel2Controller.text = response.body != null
-          ? jsonDecode(response.body)["panels"][1]
-          : "Loading";
-    });
   }
 
   final _formKey1 = GlobalKey<FormState>();
@@ -342,7 +347,7 @@ class _InputScreenState extends State<InputScreen> {
   }
 
   SliverToBoxAdapter _buildUploadFile() {
-    String indicator = "Consumption of the last week :";
+
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.all(20),
